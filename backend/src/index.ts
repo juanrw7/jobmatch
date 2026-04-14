@@ -3,6 +3,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import authRoutes from './routes/auth'
 import jobsRoutes from './routes/jobs'
+import profileRoutes from './routes/profile'
+import recruiterProfileRoutes from './routes/recruiter-profile'
 
 dotenv.config()
 
@@ -16,6 +18,14 @@ app.use(express.json())
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/jobs', jobsRoutes)
+app.use('/api/profile', profileRoutes)
+app.use('/api/recruiter-profile', recruiterProfileRoutes)
+
+// Root route
+app.get('/', (req, res) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001'
+  res.redirect(frontendUrl)
+})
 
 // Health check
 app.get('/health', (req, res) => {

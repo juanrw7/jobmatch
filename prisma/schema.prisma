@@ -9,27 +9,56 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserType {
+  CANDIDATE
+  RECRUITER
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   firstName String
   lastName  String
   email     String   @unique
   password  String
+  userType  UserType @default(CANDIDATE)
+  passwordResetTokenHash String?
+  passwordResetExpiresAt DateTime?
+  onboardingCompleted Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   profile     Profile?
+  recruiterProfile RecruiterProfile?
   preferences Preferences?
   applications Application[]
+  postedJobs Job[] @relation("RecruiterJobs")
+  recommendationHistory RecommendationHistory[]
+}
+
+model RecruiterProfile {
+  id           Int     @id @default(autoincrement())
+  userId       Int     @unique
+  companyName  String?
+  description  String?
+  logoUrl      String?
+  sector       String?
+  website      String?
+  location     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Profile {
   id          Int     @id @default(autoincrement())
   userId      Int     @unique
   bio         String?
+  education   String?
   skills      String[]
+  interests   String[]
   experience  String?
   location    String?
+  cvUrl       String?
+  photoUrl    String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -47,15 +76,33 @@ model Preferences {
 
 model Job {
   id          Int      @id @default(autoincrement())
+  recruiterId Int?
   title       String
   description String
   requirements String[]
   salary      Int?
   location    String?
   company     String?
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
+  recruiter User? @relation("RecruiterJobs", fields: [recruiterId], references: [id], onDelete: SetNull)
   applications Application[]
+  recommendationHistory RecommendationHistory[]
+}
+
+model RecommendationHistory {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  jobId     Int
+  score     Int
+  shownAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([userId, shownAt])
+  @@unique([userId, jobId])
 }
 
 model Application {
