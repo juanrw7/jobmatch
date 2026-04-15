@@ -382,17 +382,10 @@ Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detall
 
 ## 👥 Equipo de Desarrollo
 
-- **Desarrollador Principal**: [Tu Nombre]
+- **Desarrollador Principal**: Fabiola Valencia Barrios
+- **Desarrollador Secundarios**: Yohn Gaviria, Juan Manuel Ramirez y Samuel Serna
 - **Arquitectura**: Next.js + Express + PostgreSQL
 - **Fecha de Desarrollo**: Marzo 2026
-
----
-
-## 📞 Soporte
-
-Para soporte técnico o preguntas:
-- Email: soporte@jobmatch.com
-- Issues: [GitHub Issues](https://github.com/username/jobmatch/issues)
 
 ---
 
